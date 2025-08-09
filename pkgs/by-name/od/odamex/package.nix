@@ -1,4 +1,6 @@
 {
+  copyDesktopItems,
+  makeDesktopItem,
   lib,
   stdenv,
   fetchurl,
@@ -8,17 +10,13 @@
   SDL2,
   SDL2_mixer,
   SDL2_net,
+  wrapGAppsHook3,
   wxGTK32,
   zlib,
   fltk,
   curl,
-  cairo,
-  pango,
-  glfw,
-  glm,
   alsa-lib,
   deutex,
-  portmidi,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +28,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-fk6DrAhUa3eOqeCNWjSoKg9X81Bb3jrUq6JloTwfE4c=";
   };
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "odamex";
+      desktopName = "Odamex Client";
+      categories = ["Game"];
+      exec = "odamex";
+    })
+    (makeDesktopItem {
+      name = "odalaunch";
+      desktopName = "Odamex Launcher";
+      categories = ["Game"];
+      exec = "odalaunch";
+    })
+    (makeDesktopItem {
+      name = "odasrv";
+      desktopName = "Odamex Server";
+      categories = ["Game"];
+      exec = "odasrv";
+    })
+  ];
+
   nativeBuildInputs = [
+    copyDesktopItems
     cmake
     pkg-config
     makeWrapper
@@ -38,8 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glm
-    glfw
+    wrapGAppsHook3
     fltk
     zlib
     SDL2
@@ -47,10 +66,7 @@ stdenv.mkDerivation rec {
     SDL2_net
     wxGTK32
     curl
-    cairo
-    pango
     alsa-lib
-    portmidi
   ];
 
   installPhase =
@@ -58,13 +74,6 @@ stdenv.mkDerivation rec {
       runHook preInstall
     ''
     + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir -p $out/{Applications,bin}
-          mv odalaunch/odalaunch.app $out/Applications
-          makeWrapper $out/{Applications/odalaunch.app/Contents/MacOS,bin}/odalaunch
-        ''
-      else
         ''
           make install
         ''
