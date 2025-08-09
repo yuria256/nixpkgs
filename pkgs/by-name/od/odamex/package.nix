@@ -32,19 +32,19 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "odamex";
       desktopName = "Odamex Client";
-      categories = ["Game"];
+      categories = [ "Game" ];
       exec = "odamex";
     })
     (makeDesktopItem {
       name = "odalaunch";
       desktopName = "Odamex Launcher";
-      categories = ["Game"];
+      categories = [ "Game" ];
       exec = "odalaunch";
     })
     (makeDesktopItem {
       name = "odasrv";
       desktopName = "Odamex Server";
-      categories = ["Game"];
+      categories = [ "Game" ];
       exec = "odasrv";
     })
   ];
@@ -73,11 +73,9 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstall
     ''
-    + (
-        ''
-          make install
-        ''
-    )
+    + (''
+      make install
+    '')
     + ''
       runHook postInstall
     '';
