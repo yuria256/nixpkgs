@@ -9,7 +9,6 @@
   makeWrapper,
   SDL2,
   SDL2_mixer,
-  SDL2_net,
   wrapGAppsHook3,
   wxGTK32,
   zlib,
@@ -31,19 +30,22 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "odamex";
-      desktopName = "Odamex Client";
+      desktopName = "Odamex";
+      icon = "icon_odamex_512";
       categories = [ "Game" ];
       exec = "odamex";
     })
     (makeDesktopItem {
       name = "odalaunch";
       desktopName = "Odamex Launcher";
+      icon = "icon_odalaunch_512";
       categories = [ "Game" ];
       exec = "odalaunch";
     })
     (makeDesktopItem {
       name = "odasrv";
       desktopName = "Odamex Server";
+      icon = "icon_odasrv_512";
       categories = [ "Game" ];
       exec = "odasrv";
     })
@@ -63,7 +65,6 @@ stdenv.mkDerivation rec {
     zlib
     SDL2
     SDL2_mixer
-    SDL2_net
     wxGTK32
     curl
     alsa-lib
@@ -74,6 +75,10 @@ stdenv.mkDerivation rec {
       runHook preInstall
     ''
     + (''
+      mkdir -p $out/share/pixmaps
+      cp ../media/icon_odamex_512.png $out/share/pixmaps/icon_odamex_512.png
+      cp ../media/icon_odalaunch_512.png $out/share/pixmaps/icon_odalaunch_512.png
+      cp ../media/icon_odasrv_512.png $out/share/pixmaps/icon_odasrv_512.png
       make install
     '')
     + ''
